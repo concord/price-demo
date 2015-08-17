@@ -1,0 +1,12 @@
+backports.ssl-match-hostname==3.4.0.2
+concord-py==0.2.5
+graphviz==0.4.3
+kazoo==2.0
+six==1.9.0
+thrift==0.9.2
+trace2html==0.2.1
+txaio==1.0.3
+urllib3==1.11
+websocket-client==0.32.0
+wheel==0.24.0
+zope.interface==4.1.2
