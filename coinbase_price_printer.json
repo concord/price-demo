@@ -1,0 +1,10 @@
+{
+  "zookeeper_hosts": "localhost:2181",
+  "zookeeper_path": "/bolt",
+  "executable_arguments": ["CoinbasePricePrinter.py"],
+  "executable_name": "runner.bash",
+  "compress_files": ["CoinbasePricePrinter.py", "runner.bash"],
+  "computation_name": "coinbase-price-printer",
+  "mem": 1024,
+  "cpus": 1.0
+}

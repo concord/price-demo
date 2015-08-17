@@ -21,7 +21,7 @@ def time_millis():
 
 class CoinbaseSource(Computation):
     def init(self, ctx):
-        log.info("Counter initialized")
+        log.info("Coinbase initialized")
         self.ws = create_connection(COINBASE_FEED_URL)
         log.info("web socket connection to exchange created")
         ctx.set_timer('loop', time_millis() + 1000) # start in 1 sec
@@ -31,7 +31,7 @@ class CoinbaseSource(Computation):
             "product_id": "BTC-USD"
         }))
         record = self.ws.recv()
-        ctx.produce_record('btcusd', 'empty', json.dumps(record))
+        ctx.produce_record('btcusd', 'empty', record)
         ctx.set_timer(key, time_millis() + 1000) # every sec
     def metadata(self):
         return Metadata(name='coinbase-indx', istreams=[], ostreams=['btcusd'])
