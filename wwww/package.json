@@ -43,6 +43,7 @@
     "material-ui-sass": "^0.7.5",
     "object-assign": "^4.0.1",
     "react": "^0.13.3",
+    "react-stockcharts": "^0.1.6",
     "react-tap-event-plugin": "^0.1.7"
   }
 }

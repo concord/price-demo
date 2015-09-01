@@ -4,11 +4,11 @@ import BaseStore from './BaseStore';
 import assign from 'object-assign';
 
 // data storage
-let _data = [];
+let data_ = [];
 
 // add private functions to modify data
 function addItem(title, completed=false) {
-  _data.push({title, completed});
+  data_.push({title, completed});
 }
 
 // Facebook style store creation.
@@ -16,7 +16,7 @@ const TodoStore = assign({}, BaseStore, {
   // public methods used by Controller-View to operate on data
   getAll() {
     return {
-      tasks: _data
+      tasks: data_
     };
   },
 

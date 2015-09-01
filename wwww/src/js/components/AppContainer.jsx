@@ -4,7 +4,7 @@ import ActionCreator from '../actions/TodoActionCreators';
 import App from './App.jsx';
 
 export default React.createClass({
-  _onChange() {
+  onChange_() {
     this.setState(TodoStore.getAll());
   },
 
@@ -13,11 +13,11 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    TodoStore.addChangeListener(this._onChange);
+    TodoStore.addChangeListener(this.onChange_);
   },
 
   componentWillUnmount() {
-    TodoStore.removeChangeListener(this._onChange);
+    TodoStore.removeChangeListener(this.onChange_);
   },
 
   handleAddTask(e) {
