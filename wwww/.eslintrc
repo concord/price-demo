@@ -1,12 +1,11 @@
-// From https://github.com/airbnb/javascript/blob/master/linters/.eslintrc
 {
-  "parser": "babel-eslint",          // https://github.com/babel/babel-eslint
+  "parser": "babel-eslint",
   "plugins": [
-    "react"                          // https://github.com/yannickcr/eslint-plugin-react
+    "react"
   ],
-  "env": {                           // http://eslint.org/docs/user-guide/configuring.html#specifying-environments
-    "browser": true,                 // browser global variables
-    "node": true                     // Node.js global variables and Node.js-specific rules
+  "env": {
+    "browser": true,
+    "node": true
   },
   "ecmaFeatures": {
     "arrowFunctions": true,
@@ -31,13 +30,13 @@
  * Strict mode
  */
     // babel inserts "use strict"; for us
-    "strict": [2, "never"],          // http://eslint.org/docs/rules/strict
+    // http://eslint.org/docs/rules/strict
+    "strict": [2, "never"],
 
 /**
  * ES6
  */
     "no-var": 2,                     // http://eslint.org/docs/rules/no-var
-    "prefer-const": 2,               // http://eslint.org/docs/rules/prefer-const
 
 /**
  * Variables
@@ -53,7 +52,7 @@
 /**
  * Possible errors
  */
-    "comma-dangle": [2, "always-multiline"],    // http://eslint.org/docs/rules/comma-dangle
+    "comma-dangle": [2, "never"],    // http://eslint.org/docs/rules/comma-dangle
     "no-cond-assign": [2, "always"], // http://eslint.org/docs/rules/no-cond-assign
     "no-console": 1,                 // http://eslint.org/docs/rules/no-console
     "no-debugger": 1,                // http://eslint.org/docs/rules/no-debugger
@@ -122,7 +121,7 @@
 /**
  * Style
  */
-    "indent": [2, 2],                // http://eslint.org/docs/rules/indent
+    "indent": [2, 2],                // http://eslint.org/docs/rules/
     "brace-style": [2,               // http://eslint.org/docs/rules/brace-style
       "1tbs", {
       "allowSingleLine": true
@@ -173,40 +172,35 @@
 /**
  * JSX style
  */
-    "react/display-name": 0,         // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/display-name.md
-    "react/jsx-boolean-value": 2,    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md
-    "react/jsx-quotes": [2, "double"], // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-quotes.md
-    "react/jsx-no-undef": 2,         // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-undef.md
-    "react/jsx-sort-props": 0,       // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-sort-props.md
-    "react/jsx-sort-prop-types": 0,  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-sort-prop-types.md
-    "react/jsx-uses-react": 2,       // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-uses-react.md
-    "react/jsx-uses-vars": 2,        // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-uses-vars.md
-    "react/no-did-mount-set-state": [2, "allow-in-func"], // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-did-mount-set-state.md
-    "react/no-did-update-set-state": 2, // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-did-update-set-state.md
-    "react/no-multi-comp": 2,        // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-multi-comp.md
-    "react/no-unknown-property": 2,  // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-unknown-property.md
-    "react/prop-types": 2,           // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prop-types.md
-    "react/react-in-jsx-scope": 2,   // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/react-in-jsx-scope.md
-    "react/self-closing-comp": 2,    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/self-closing-comp.md
-    "react/wrap-multilines": 2,      // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/wrap-multilines.md
-    "react/sort-comp": [2, {         // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/sort-comp.md
+    "react/display-name": 0,
+    "react/jsx-boolean-value": 2,
+    "react/jsx-quotes": [2, "double"],
+    "react/jsx-no-undef": 2,
+    "react/jsx-sort-props": 0,
+    "react/jsx-sort-prop-types": 0,
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/no-did-mount-set-state": [2, "allow-in-func"],
+    "react/no-did-update-set-state": 2,
+    "react/no-multi-comp": 2,
+    "react/no-unknown-property": 2,
+    "react/prop-types": 2,
+    "react/react-in-jsx-scope": 2,
+    "react/self-closing-comp": 2,
+    "react/wrap-multilines": 2,
+    "react/sort-comp": [2, {
       "order": [
         "displayName",
-        "propTypes",
-        "contextTypes",
-        "childContextTypes",
         "mixins",
         "statics",
-        "defaultProps",
+        "propTypes",
         "getDefaultProps",
         "getInitialState",
-        "getChildContext",
         "componentWillMount",
         "componentDidMount",
         "componentWillReceiveProps",
         "shouldComponentUpdate",
         "componentWillUpdate",
-        "componentDidUpdate",
         "componentWillUnmount",
         "/^on.+$/",
         "/^get.+$/",
