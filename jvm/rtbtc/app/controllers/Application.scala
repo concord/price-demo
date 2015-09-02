@@ -39,7 +39,7 @@ class GraphWebSocketActor(dataChannel: Channel[JsValue]) extends Actor {
 
   def receive = {
     case e: GraphEventRegistration =>
-      println(self + e.toString)
+      Logger.info(self + e.toString)
       produceMessage(e)
   }
 
@@ -47,7 +47,7 @@ class GraphWebSocketActor(dataChannel: Channel[JsValue]) extends Actor {
     dataChannel.push(Json.toJson(GraphEventPoint(e.topic, 0.0, 0.0, 0.0)))
 
   override def postStop() = {
-    println("closing socket")
+    Logger.info("closing websocket")
   }
 
 }
@@ -55,25 +55,28 @@ class GraphWebSocketActor(dataChannel: Channel[JsValue]) extends Actor {
 class Application extends Controller {
   import JsonFormats._
   def index = Action {
-    //println(Runtime.getRuntime().availableProcessors())
-    Ok(views.html.index("Your new application is ready."))
+    Logger.info("Runtime procs: " + Runtime.getRuntime().availableProcessors())
+    Ok(views.html.index("Concord!"))
   }
 
   def graph = WebSocket.using[JsValue] { request =>
-    println("wellp")
+    Logger.info("New websocket client request")
     // Concurrent.broadcast returns (Enumerator, Concurrent.Channel)
     val (out, channel) = Concurrent.broadcast[JsValue]
-    val in = Iteratee.foreach[JsValue] { msg =>
-      println(msg)
-      new Thread {
-        while (true) {
-          println("wuuuuuuuuuuut")
-          channel.push(Json.toJson(GraphEventPoint("foo", 0.0, 0.0, 0.0)))
-          Thread.sleep(10000)
-        }
-      }.start
+    val in = Iteratee.foreach[JsValue] { js =>
+      Logger.info(s"Javascript request: $js")
+      (js \ "topic").asOpt[String] match {
+        case Some("btcusd") =>
+          new Thread {
+            while (true) {
+              channel.push(Json.toJson(GraphEventPoint("foo", 0.0, 0.0, 0.0)))
+              Thread.sleep(10000)
+            }
+          }.start
+        case Some(x) => Logger.info("Skipping invalid request for topic: " + x)
+        case _ =>
+      }
     }
-
     (in, out)
   }
 }

@@ -29,7 +29,7 @@
 
     function onOpen(evt) {
         writeToScreen("CONNECTED");
-        doSend(JSON.stringify({foo:true}));
+        doSend(JSON.stringify({topic:'btcusd'}));
     }
 
     function onClose(evt) {
