@@ -1,21 +1,7 @@
-@(message: String)(implicit request: RequestHeader)
+@(message: String)
 
-@import helper._
+@main("Welcome to Play") {
 
-@main("Websocket DEMO") {
-
-    <div class="centered main">
-    
-        <h1 id="welcome">@message</h1>
-	
-	    <ul>
-	    	<li>
-	    		<a href=@routes.Application.indexStateless>Stateless</a>
-	    	</li>
-	   	 	<li>
-	    		<a href=@routes.Application.indexStatefull>Statefull</a>
-	    	</li>
-	    </ul>
-    </div>
+    @play20.welcome(message)
 
 }
