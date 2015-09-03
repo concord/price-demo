@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 
 // Need to export jquery as
 // window.$ for ReStock
 import jquery from 'jquery'
 window.$ = jquery
 import ReStock from 'react-stockcharts'
-
+import d3 from 'd3'
 
 const ChartCanvas = ReStock.ChartCanvas
 const XAxis = ReStock.XAxis
@@ -23,17 +23,24 @@ export default React.createClass({
     ChartWidthMixin
   ],
   getInitialState() {
-    return { };
+    return {
+      width: 960
+    };
   },
   componentDidMount() {},
+  propTypes: {
+    data: PropTypes.array.isRequired
+  },
+
   render() {
-    if (this.state === null || !this.state.width) {
-      return <div />;
+    if (!this.state || !this.state.width) {
+      return (<div><h1>VolumeChart:Invalid arguments</h1></div>);
     }
-    return (<ChartCanvas
+    return (
+      <ChartCanvas
       width={ this.state.width }
       height={ 400 }
-      margin={ {
+      margin={{
         left: 50,
         right: 50,
         top: 10,
@@ -51,10 +58,8 @@ export default React.createClass({
           </DataSeries>
         </Chart>
         <Chart id={ 2 }>
-          <YAxis axisAt="left"
-                 orient="left"
-                 ticks={ 5 }
-                 tickFormat={ d3.format("s")} />
+          <YAxis axisAt="left" orient="left" ticks={ 5 }
+      tickFormat={ d3.format("s")} />
           <DataSeries yAccessor={ (d) => d.volume }>
             <HistogramSeries />
           </DataSeries>
