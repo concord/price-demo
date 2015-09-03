@@ -1,5 +1,6 @@
 package controllers
 
+import com.typesafe.scalalogging.LazyLogging
 import play.api._
 import play.api.libs.iteratee.Concurrent
 import play.api.libs.iteratee.Concurrent.Channel
@@ -34,12 +35,13 @@ object JsonFormats {
     })
 }
 
-class GraphWebSocketActor(dataChannel: Channel[JsValue]) extends Actor {
+class GraphWebSocketActor(dataChannel: Channel[JsValue])
+  extends Actor with LazyLogging {
   import JsonFormats._
 
   def receive = {
     case e: GraphEventRegistration =>
-      Logger.info(self + e.toString)
+      logger.info(self + e.toString)
       produceMessage(e)
   }
 
@@ -52,19 +54,19 @@ class GraphWebSocketActor(dataChannel: Channel[JsValue]) extends Actor {
 
 }
 
-class Application extends Controller {
+class Application extends Controller with LazyLogging {
   import JsonFormats._
   def index = Action {
-    Logger.info("Runtime procs: " + Runtime.getRuntime().availableProcessors())
+    logger.info("Runtime procs: " + Runtime.getRuntime().availableProcessors())
     Ok(views.html.index("Concord!"))
   }
 
   def graph = WebSocket.using[JsValue] { request =>
-    Logger.info("New websocket client request")
+    logger.info("New websocket client request")
     // Concurrent.broadcast returns (Enumerator, Concurrent.Channel)
     val (out, channel) = Concurrent.broadcast[JsValue]
     val in = Iteratee.foreach[JsValue] { js =>
-      Logger.info(s"Javascript request: $js")
+      logger.info(s"Javascript request: $js")
       (js \ "topic").asOpt[String] match {
         case Some("btcusd") =>
           new Thread {
@@ -73,7 +75,7 @@ class Application extends Controller {
               Thread.sleep(10000)
             }
           }.start
-        case Some(x) => Logger.info("Skipping invalid request for topic: " + x)
+        case Some(x) => logger.info("Skipping invalid request for topic: " + x)
         case _ =>
       }
     }

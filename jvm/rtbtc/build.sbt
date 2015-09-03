@@ -11,7 +11,8 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   specs2 % Test,
-  "org.apache.kafka" %% "kafka"  % "0.8.2.0" exclude("log4j", "log4j") exclude("org.slf4j","slf4j-log4j12")
+  "org.apache.kafka" %% "kafka"  % "0.8.2.0" exclude("log4j", "log4j") exclude("org.slf4j","slf4j-log4j12"),
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
 
 )
 
