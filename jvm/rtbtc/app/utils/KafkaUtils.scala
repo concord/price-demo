@@ -40,7 +40,3 @@ class LocalConsumer(topic: String) extends AutoCloseable with LazyLogging {
     rawConsumer.close()
   }
 }
-
-object KafkaUtils {
-
-}

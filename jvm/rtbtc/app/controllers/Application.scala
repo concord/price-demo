@@ -6,56 +6,15 @@ import play.api.libs.iteratee.Concurrent
 import play.api.libs.iteratee.Concurrent.Channel
 import play.api.libs.iteratee.Iteratee
 import play.api.libs.iteratee.Iteratee._
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
 import play.api.mvc._
-import akka.actor._
 import play.api.Play.current
-import play.api.libs.json._
-import play.api.mvc.WebSocket.FrameFormatter
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import scala.util.control.NonFatal
-
-case class GraphEventRegistration(topic: String)
-case class GraphEventPoint(topic: String, sell: Double, buy: Double, volume: Double)
-
-object JsonFormats {
-  implicit val registrationFormat = Json.format[GraphEventRegistration]
-  implicit val registrationFrame: FrameFormatter[GraphEventRegistration] =
-    FrameFormatter.stringFrame.transform(_.toString, Json.parse(_).as[GraphEventRegistration])
-
-  implicit val eventJsonFormat = Json.format[GraphEventPoint]
-  implicit val eventFrame: FrameFormatter[GraphEventPoint] =
-    FrameFormatter.stringFrame.transform(_.toString, Json.parse(_).as[GraphEventPoint])
-  implicit val myJsonFrame: FrameFormatter[JsValue] =
-    implicitly[FrameFormatter[String]].transform(Json.stringify, { text =>
-      try {
-        Json.parse(text)
-      } catch {
-        case NonFatal(e) => Json.obj("error" -> e.getMessage)
-      }
-    })
-}
-
-class GraphWebSocketActor(dataChannel: Channel[JsValue])
-  extends Actor with LazyLogging {
-  import JsonFormats._
-
-  def receive = {
-    case e: GraphEventRegistration =>
-      logger.info(self + e.toString)
-      produceMessage(e)
-  }
-
-  def produceMessage(e: GraphEventRegistration) =
-    dataChannel.push(Json.toJson(GraphEventPoint(e.topic, 0.0, 0.0, 0.0)))
-
-  override def postStop() = {
-    Logger.info("closing websocket")
-  }
-
-}
+import utils.Events._
 
 class Application extends Controller with LazyLogging {
-  import JsonFormats._
+  import play.api.libs.concurrent.Execution.Implicits.defaultContext
+  import utils.JsonFormats._
   def index = Action {
     logger.info("Runtime procs: " + Runtime.getRuntime().availableProcessors())
     Ok(views.html.index("Concord!"))
