@@ -1,12 +1,12 @@
 package utils
 
-import com.typesafe.scalalogging.LazyLogging
+import com.typesafe.scalalogging.StrictLogging
 import kafka.api.{ FetchRequest, FetchRequestBuilder }
 import kafka.javaapi.consumer.SimpleConsumer
 import kafka.javaapi.message.ByteBufferMessageSet
 import kafka.message.MessageAndOffset
 
-class LocalConsumer(topic: String) extends AutoCloseable with LazyLogging {
+class LocalConsumer(topic: String) extends AutoCloseable with StrictLogging {
   val kFetchSize = 1024
   val uuidStr = java.util.UUID.randomUUID.toString
   val rawConsumer = new SimpleConsumer("localhost", 9091, 100000, 64 * 1024, uuidStr);
