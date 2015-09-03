@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import TaskList from './TaskList.jsx';
 import {AppCanvas, RaisedButton, Styles} from 'material-ui';
-
+import VolumeChart from './VolumeChart.jsx'
 const ThemeManager = new Styles.ThemeManager();
 
 export default React.createClass({
@@ -31,6 +31,7 @@ export default React.createClass({
     let {onAddTask, onClear, tasks} = this.props;
     return (
       <div className="example-page">
+        <VolumeChart />
         <h1>Learning Flux</h1>
         <p>
           Below is a list of tasks you can implement to better grasp the patterns behind Flux.<br />
