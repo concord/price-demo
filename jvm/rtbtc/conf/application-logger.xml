@@ -4,7 +4,7 @@
     <encoder>
       <charset>UTF-8</charset>
       <!-- [IWEF] mmdd hh:mm:ss.uuuuuu threadid file:line] msg -->
-      <pattern>[%1level] %-15(%d{HH:mm:ss.SSS} %thread) %logger{35}:%line] %msg%n</pattern>
+      <pattern>%-5level %-15(%d{HH:mm:ss.SSS} %thread) %logger{35}:%line] %msg%n</pattern>
     </encoder>
   </appender>
   <root level="info">
