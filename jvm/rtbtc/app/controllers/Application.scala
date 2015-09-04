@@ -1,6 +1,7 @@
 package controllers
 
 import com.typesafe.scalalogging.StrictLogging
+import java.util.Random
 import play.api._
 import play.api.libs.iteratee.Concurrent
 import play.api.libs.iteratee.Concurrent.Channel
@@ -11,6 +12,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import play.api.Play.current
 import utils.Events._
+import scala.math
 
 class Application extends Controller with StrictLogging {
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -22,7 +24,7 @@ class Application extends Controller with StrictLogging {
   // Concurrent.broadcast returns (Enumerator, Concurrent.Channel)
   val (clientEnumerator, dataChannel) = Concurrent.broadcast[JsValue]
 
-  def graph = WebSocket.using[JsValue] { request =>
+  def dashboard = WebSocket.using[JsValue] { request =>
     logger.info("New websocket client request")
     val in = Iteratee.foreach[JsValue] { js =>
       logger.info(s"Javascript request: $js")
@@ -32,7 +34,12 @@ class Application extends Controller with StrictLogging {
           new Thread {
             while (true) {
               logger.info("Producing graph point")
-              dataChannel.push(Json.toJson(GraphEventPoint("foo", 0.0, 0.0, 0.0)))
+              val ret = DashboardData(Some((0 to 999).map {
+                x => genGraphEventPoint
+              }.toList.sortWith((x: GraphEventPoint, y: GraphEventPoint) => {
+                x.date < y.date
+              })))
+              dataChannel.push(Json.toJson(ret))
               Thread.sleep(10000)
             }
           }.start
@@ -41,6 +48,22 @@ class Application extends Controller with StrictLogging {
       }
     }
     (in, clientEnumerator)
+  }
+
+  // FIXME:(agallego) - delete
+  def genGraphEventPoint: GraphEventPoint = {
+    val rand = new Random()
+    val d = rand.nextDouble
+    GraphEventPoint(
+      "default",
+      "update",
+      java.lang.System.currentTimeMillis - (rand.nextLong % 100000),
+      rand.nextDouble * 100000, // volume
+      d * 1000, // open
+      (d + rand.nextDouble) * 1000, // close
+      (d + rand.nextDouble + rand.nextDouble) * 1000, // high
+      math.max(0.002d, d - rand.nextDouble) * 1000 // low
+    )
   }
 
 }

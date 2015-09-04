@@ -11,6 +11,7 @@ export default React.createClass({
     this.setState(DashboardStore.getAll());
   },
   getInitialState() {
+    DashboardStore.attachNotificationCallback();
     return DashboardStore.getAll();
   },
   childContextTypes: {
@@ -31,14 +32,13 @@ export default React.createClass({
   },
 
   render() {
-      let {dashboard, ready} = this.state;
-      console.log("hello", dashboard);
-      console.log("hello", ready);
-    if (!ready) {
+    console.log("hello", this.state.dashboard);
+    console.log("hello", this.state.ready);
+    if (!this.state.ready) {
       return (<div><h1>Downloading data </h1></div>)
     }
     return (
-      <VolumeChart data={dashboard}/>
+      <VolumeChart data={this.state.dashboard}/>
       // <div className="example-page">
 
       //   <h1>Learning Flux</h1>
