@@ -1,5 +1,5 @@
 import Dispatcher from '../Dispatcher';
-import Constants from '../Constants';
+import Constants from '../constants/ActionConstants';
 
 export default {
   addItem(text) {

@@ -1,5 +1,5 @@
 import assign from 'object-assign';
-import Constants from '../Constants';
+import Constants from '../constants/ActionConstants.js';
 import {EventEmitter} from 'events';
 
 export default assign({}, EventEmitter.prototype, {

@@ -33,14 +33,14 @@ class Application extends Controller with StrictLogging {
           logger.info("Producing btcusd")
           new Thread {
             while (true) {
-              logger.info("Producing graph point")
-              val ret = DashboardData(Some((0 to 999).map {
+              // logger.info("Producing graph point")
+              val ret = DashboardData(Some((1 to 1).map {
                 x => genGraphEventPoint
               }.toList.sortWith((x: GraphEventPoint, y: GraphEventPoint) => {
                 x.date < y.date
               })))
               dataChannel.push(Json.toJson(ret))
-              Thread.sleep(10000)
+              Thread.sleep(150)
             }
           }.start
         case Some(x) => logger.info("Skipping invalid request for topic: " + x)
@@ -57,7 +57,7 @@ class Application extends Controller with StrictLogging {
     GraphEventPoint(
       "default",
       "update",
-      java.lang.System.currentTimeMillis - (rand.nextLong % 100000),
+      java.lang.System.currentTimeMillis - (rand.nextLong % 50),
       rand.nextDouble * 100000, // volume
       d * 1000, // open
       (d + rand.nextDouble) * 1000, // close

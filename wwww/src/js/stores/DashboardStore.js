@@ -1,5 +1,5 @@
 import Dispatcher from '../Dispatcher';
-import Constants from '../Constants';
+import Constants from '../constants/ActionConstants';
 import BaseStore from './BaseStore';
 import assign from 'object-assign';
 import d3 from 'd3';
@@ -34,15 +34,15 @@ class DashboardWebSocket {
     self.ready = true;
     let msg = JSON.parse(event.data);
     if (msg && msg['graphs']) {
-      msg['graphs'].map((graphPoint) => {
-        let k = graphPoint['topic'];
-        graphPoint.date = new Date(graphPoint.date);
-        self.graphs[k] = self.graphs[k] || [];
-        self.graphs[k].push(graphPoint);
+      msg['graphs'].map((pt) => {
+        let k = pt['topic'];
+        pt.date = new Date(pt.date);
+        let g = self.graphs[k] = self.graphs[k] || [];
+        g.push([pt.date, pt.low, pt.open, pt.close, pt.high]);
       });
       Object.entries(self.graphs).map(([k, v]) => {
-        if (v.length > 1000) {
-          v = v.slice(v.length - 1000, v.length);
+        if (v.length > 40) {
+          self.graphs[k] = v.slice(v.length - 40);
         }
       });
       if (self.notificationCallBack) {
@@ -72,24 +72,8 @@ const DashboardStore = assign({}, BaseStore, {
     dashboardData.notificationCallBack = function() {
       DashboardStore.emitChange();
     };
-    // var parseDate = d3.time.format("%Y-%m-%d").parse;
-    // d3.tsv("//rrag.github.io/react-stockcharts/data/MSFT.tsv", (err, data) => {
-    //   /* change MSFT.tsv to MSFT_full.tsv above to see how this works with lots of data points */
-    //   data.forEach((d, i) => {
-    //     d.date = new Date(parseDate(d.date).getTime());
-    //     d.open = +d.open;
-    //     d.high = +d.high;
-    //     d.low = +d.low;
-    //     d.close = +d.close;
-    //     d.volume = +d.volume;
-    //   // console.log(d);
-    //   });
-    //   console.log("Should look like: ", data);
-    // });
-
   },
   getAll() {
-    console.log("loop me!", dashboardData);
     return {
       ready: dashboardData.isReady(),
       dashboard: dashboardData.graph("default")
