@@ -7,12 +7,13 @@ import jquery from 'jquery';
 class GoogleChartLoader  {
   constructor(){
     this.isLoading = true;
+    this.promise = q.defer();
     let options = {
       dataType: "script",
       cache: true,
       url: "https://www.google.com/jsapi"
     };
-    $.ajax(options).done(() => {
+    jquery.ajax(options).done(() => {
       window.google.load("visualization", "1", {
         packages: ["corechart"],
         callback: () => {
@@ -23,8 +24,8 @@ class GoogleChartLoader  {
     });
 
   }
-  isReady() {
-    return !this.isLoading;
+  promise() {
+    return this.promise;
   }
 
 };
@@ -32,8 +33,8 @@ class GoogleChartLoader  {
 let loader = new GoogleChartLoader;
 
 class GoogleChartSingleton {
-  static isGoogleChartLoaded() {
-    return loader.isReady();
+  static promise() {
+    return loader.promise();
   }
 }
 

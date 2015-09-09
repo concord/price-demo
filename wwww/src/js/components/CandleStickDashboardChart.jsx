@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-var Chart = require('react-google-charts').Chart;
+import Chart from './Chart';
 
 
 console.log(Chart);
@@ -10,7 +10,7 @@ export default React.createClass({
   },
   render() {
     let chartData = this.props.chartData;
-    let opts = {}; // defaults are fine
+
     let columns = [
       {
         type: 'date',
@@ -37,7 +37,6 @@ export default React.createClass({
       <div className="Examples">
       <h3>Bitcoin price</h3>
         <Chart chartType={'CandlestickChart'}
-        options={opts}
         width={'100%'}
         height={'640px'}
         rows={chartData}
