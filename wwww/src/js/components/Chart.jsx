@@ -4,7 +4,6 @@ import DEFAULT_COLORS from '../constants/DEFAULT_CHART_COLORS';
 
 export default React.createClass({
     getInitialState() {
-        debugger;
         let graphId = "graph_" + Math.floor(Math.random() * 100000);
         GoogleChartSingleton.promise().then(()=> {
             this.setState({
@@ -91,9 +90,11 @@ export default React.createClass({
         }
 
         // repopulate teh graph
-        for (var i = 0; i < this.props.columns.length; i++) {
-            data.addColumn(this.props.columns[i].type, this.props.columns[i].label);
-        }
+        this.props.columns.map((x)=>{
+            data.addColumn(x.type, x.label);
+        });
+
+
         if (this.props.rows.length > 0) {
             data.addRows(this.props.rows);
         }

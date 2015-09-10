@@ -40,7 +40,7 @@ class Application extends Controller with StrictLogging {
                 x.date < y.date
               })))
               dataChannel.push(Json.toJson(ret))
-              Thread.sleep(200)
+              Thread.sleep(1000)
             }
           }.start
         case Some(x) => logger.info("Skipping invalid request for topic: " + x)
@@ -57,12 +57,12 @@ class Application extends Controller with StrictLogging {
     GraphEventPoint(
       "default",
       "update",
-      java.lang.System.currentTimeMillis - (rand.nextLong % 50),
-      rand.nextDouble * 100000, // volume
-      d * 1000, // open
-      (d + rand.nextDouble) * 1000, // close
-      (d + rand.nextDouble + rand.nextDouble) * 1000, // high
-      math.max(0.002d, d - rand.nextDouble) * 1000 // low
+      java.lang.System.currentTimeMillis,
+      rand.nextDouble * 1000, // volume
+      d * 100, // open
+      (d + rand.nextDouble) * 100, // close
+      (d + rand.nextDouble + rand.nextDouble) * 100, // high
+      math.max(0.002d, d - rand.nextDouble) * 100 // low
     )
   }
 

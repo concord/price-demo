@@ -38,11 +38,11 @@ class DashboardWebSocket {
         let k = pt['topic'];
         pt.date = new Date(pt.date);
         let g = self.graphs[k] = self.graphs[k] || [];
-        g.push([pt.date, pt.low, pt.open, pt.close, pt.high]);
+        g.push([pt.date,pt.close]);
       });
       Object.entries(self.graphs).map(([k, v]) => {
-        if (v.length > 40) {
-          self.graphs[k] = v.slice(v.length - 40);
+        if (v.length > 100) {
+          self.graphs[k] = v.slice(v.length - 100);
         }
       });
       if (self.notificationCallBack) {

@@ -10,38 +10,34 @@ export default React.createClass({
   },
   render() {
     let chartData = this.props.chartData;
-
     let columns = [
       {
-        type: 'date',
-        label: 'Date'
+        type: 'datetime',
+        label: 'date'
       },
       {
         type: 'number',
-        label: 'Low'
-      },
-      {
-        type: 'number',
-        label: 'Open'
-      },
-      {
-        type: 'number',
-        label: 'Close'
-      },
-      {
-        type: 'number',
-        label: 'High'
+        label: 'price'
       }
     ];
+    let options = {
+        hAxis: {
+          title: 'Time of bitcoin order'
+        },
+        vAxis: {
+          title: 'Price of bitcoin'
+        },
+        backgroundColor: '#f1f8e9',
+    };
     return (
         <div className="Examples">
       <h3>Bitcoin price</h3>
-        <Chart chartType={'CandlestickChart'}
+        <Chart chartType={'LineChart'}
+        options={options}
         width={'100%'}
         height={'640px'}
         rows={chartData}
-        columns={columns}
-        graph_id={"candlestickid"} />
+        columns={columns} />
       </div>
       );
 
