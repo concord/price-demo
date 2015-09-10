@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
-import GoogleChartSingleton from './GoogleChartLoader';
-import  DEFAULT_COLORS from '../constants/DEFAULT_CHART_COLORS';
+import GoogleChartSingleton from './GoogleChartLoader.jsx';
+import DEFAULT_COLORS from '../constants/DEFAULT_CHART_COLORS';
 
 export default React.createClass({
     getInitialState() {
-        let graphId = Math.floor(Math.random() * 100000);
+        debugger;
+        let graphId = "graph_" + Math.floor(Math.random() * 100000);
         GoogleChartSingleton.promise().then(()=> {
             this.setState({
                 chartWrapper: new google.visualization.ChartWrapper({
@@ -32,21 +33,21 @@ export default React.createClass({
         return {
             graphId: graphId
         };
-    }
+    },
     componentDidMount() {
         GoogleChartSingleton.promise().then(()=>{
-            this.drawChart();
+            this.drawChart()
         });
-    }
+    },
 
     componentDidUpdate() {
         GoogleChartSingleton.promise().then(()=>{
             this.drawChart();
         });
-    }
-    propTypes: {
+    },
+    propTypes() {
         chartType: PropTypes.string.isRequired;
-    }
+    },
     getDefaultProps() {
         return {
             chartType: 'INVALID_CHART_TYPE',
@@ -63,22 +64,20 @@ export default React.createClass({
                 vAxis: {
                     title: 'Y Label'
                 },
-                width: '320px',
-                height: '480px'
+                 width: '340px',
+                 height: '640px'
 
             },
             chartEvents: [],
             onSelect: null, // TODO(agallego): delete
             legendToggle: false
         };
-    }
+    },
     render() {
-        return (<div
-            id={this.state.graphId}>
-            height={this.props.height}
-            width={this.props.width}
-            </div>);
-    }
+        return (<div id={this.state.graphId}
+            style={{height: this.props.height, width: this.props.width}}
+            />);
+    },
     resetGraph() {
         // This is a react anti pattern, but otherwise it takes too long
         // to clean the graphs
@@ -99,14 +98,12 @@ export default React.createClass({
             data.addRows(this.props.rows);
         }
 
-    }
+    },
 
     drawChart() {
         console.log("build the data table");
         this.resetGraph();
         this.state.chartWrapper.draw();
-        this.wrapper.draw();
-
     }
     // listenToChartEvents() {
     //     var self = this;

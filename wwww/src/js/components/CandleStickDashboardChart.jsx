@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import Chart from './Chart';
+import Chart from './Chart.jsx';
 
 
 console.log(Chart);
@@ -34,7 +34,7 @@ export default React.createClass({
       }
     ];
     return (
-      <div className="Examples">
+        <div className="Examples">
       <h3>Bitcoin price</h3>
         <Chart chartType={'CandlestickChart'}
         width={'100%'}

@@ -40,7 +40,7 @@ class Application extends Controller with StrictLogging {
                 x.date < y.date
               })))
               dataChannel.push(Json.toJson(ret))
-              Thread.sleep(150)
+              Thread.sleep(200)
             }
           }.start
         case Some(x) => logger.info("Skipping invalid request for topic: " + x)

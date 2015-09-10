@@ -7,7 +7,7 @@ import jquery from 'jquery';
 class GoogleChartLoader  {
   constructor(){
     this.isLoading = true;
-    this.promise = q.defer();
+    this.q = q.defer();
     let options = {
       dataType: "script",
       cache: true,
@@ -18,23 +18,19 @@ class GoogleChartLoader  {
         packages: ["corechart"],
         callback: () => {
           this.isLoading = false;
-          this.promise.resolve();
+          this.q.resolve();
         }
       });
     });
 
   }
-  promise() {
-    return this.promise;
-  }
 
 };
 
 let loader = new GoogleChartLoader;
-
 class GoogleChartSingleton {
   static promise() {
-    return loader.promise();
+    return loader.q.promise;
   }
 }
 
