@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import TaskList from './TaskList.jsx';
-import { AppCanvas, RaisedButton, Styles } from 'material-ui';
-import CandleStickDashboardChart from './CandleStickDashboardChart.jsx'
+import { AppCanvas, RaisedButton, Styles, AppBar} from 'material-ui';
+import CandleStickDashboardChart from './CandleStickDashboardChart.jsx';
+import BitcoinMovingAverages from './BitcoinMovingAverages.jsx';
 const ThemeManager = new Styles.ThemeManager();
 import DashboardStore from '../stores/DashboardStore';
 import DashboardActionCreators from '../actions/DashboardActionCreators';
@@ -32,12 +33,14 @@ export default React.createClass({
   },
 
   render() {
-    if (!this.state.ready) {
-      return (<div><h1>Downloading data </h1></div>)
-    }
-    // console .log(this.state.dashboard.length);
-    return (
-      <CandleStickDashboardChart chartData={this.state.dashboard}/>
+      return (
+          <div>
+          <AppBar title="Concord bitcoin demo" />
+          <CandleStickDashboardChart chartData={this.state.dashboard}/>
+          <BitcoinMovingAverages
+            matchAvg={this.state.matchOrderMovingAvg}
+            matchAvgPrev={this.state.matchOrderMovingAvgPrev}/>
+          </div>
     );
   }
 });

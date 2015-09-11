@@ -12,7 +12,12 @@ class DashboardWebSocket {
     this.graphs = {
       default: []
     };
+    this.matchOrderMovingAvg = 0;
+    this.matchOrderMovingAvgPrev = 0;
     this.socket = new WebSocket("ws://localhost:9000/dashboard");
+    this.socket.onerror = () => {
+      console.log("WebSocket can't be created. Socket error.");
+    };
     let self = this;
     this.socket.onmessage = (event) => {
       this.onmessage_(self, event);
@@ -38,7 +43,7 @@ class DashboardWebSocket {
         let k = pt['topic'];
         pt.date = new Date(pt.date);
         let g = self.graphs[k] = self.graphs[k] || [];
-        g.push([pt.date,pt.close]);
+        g.push([pt.date, pt.close]);
       });
       Object.entries(self.graphs).map(([k, v]) => {
         if (v.length > 100) {
@@ -76,7 +81,9 @@ const DashboardStore = assign({}, BaseStore, {
   getAll() {
     return {
       ready: dashboardData.isReady(),
-      dashboard: dashboardData.graph("default")
+      dashboard: dashboardData.graph("default"),
+      matchOrderMovingAvg: dashboardData.matchOrderMovingAvg || Math.random(),
+      matchOrderMovingAvgPrev: dashboardData.matchOrderMovingAvgPrev || Math.random()
     };
   },
 

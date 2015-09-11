@@ -46,7 +46,6 @@
     "material-ui-sass": "^0.7.5",
     "object-assign": "^4.0.1",
     "q": "^1.4.1",
-    "react": "^0.13.3",
-    "react-tap-event-plugin": "^0.1.7"
+    "react": "^0.13.3"
   }
 }

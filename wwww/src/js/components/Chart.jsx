@@ -102,7 +102,6 @@ export default React.createClass({
     },
 
     drawChart() {
-        console.log("build the data table");
         this.resetGraph();
         this.state.chartWrapper.draw();
     }
