@@ -36,10 +36,10 @@ export default React.createClass({
       return (
           <div>
           <AppBar title="Concord bitcoin demo" />
-          <CandleStickDashboardChart chartData={this.state.dashboard}/>
           <BitcoinMovingAverages
             matchAvg={this.state.matchOrderMovingAvg}
             matchAvgPrev={this.state.matchOrderMovingAvgPrev}/>
+          <CandleStickDashboardChart chartData={this.state.dashboard}/>
           </div>
     );
   }

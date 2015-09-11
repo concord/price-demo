@@ -32,12 +32,17 @@ export default React.createClass({
             if(diff == 0){
                 return (<h1>-</h1>)
             }else if(diff > 0) {
-                return (<i className="fa fa-arrow-up"></i>)
+                return (<i className="fa fa-arrow-up" style={{color: 'green'}}></i>)
             }else {
-                return (<i className="fa fa-arrow-down"></i>)
+                return (<i className="fa fa-arrow-down" style={{color: 'red'}}></i>)
             }
         }();
-        let percentChange = (this.props.matchAvgPrev - this.props.matchAvg) / 100;
+        let percentChange = ()=>{
+            const c = this.props.matchAvg;
+            const p = this.props.matchAvgPrev;
+            const diff = p - c;
+            return ((diff / p) * 100).toFixed(2);
+        }();
         return (
             <Table
             fixedHeader={true}
@@ -47,14 +52,11 @@ export default React.createClass({
             <TableBody displayRowCheckbox={false}>
             <TableRow>
             <TableRowColumn>Matched Orders Moving Average</TableRowColumn>
-            <TableRowColumn>{this.props.matchAvg}, {percentChange} {arrow}</TableRowColumn>
+            <TableRowColumn>{this.props.matchAvg.toFixed(2)}, {percentChange}% {arrow}</TableRowColumn>
             </TableRow>
             </TableBody>
             <TableFooter>
             <TableRow>
-            <TableRowColumn colSpan="2" style={{textAlign: 'right'}}>
-            powered by Concord Systems & Coinbase
-            </TableRowColumn>
             </TableRow>
             </TableFooter>
             </Table>

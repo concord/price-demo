@@ -30,7 +30,8 @@ export default React.createClass({
             //}
         });
         return {
-            graphId: graphId
+            graphId: graphId,
+            lastUpdated: new Date().getTime()
         };
     },
     componentDidMount() {
@@ -41,7 +42,11 @@ export default React.createClass({
 
     componentDidUpdate() {
         GoogleChartSingleton.promise().then(()=>{
-            this.drawChart();
+            const t = new Date().getTime();
+            if(t - this.state.lastUpdated > 1000) {
+                this.setState({lastUpdated: t});
+                this.drawChart();
+            }
         });
     },
     propTypes() {
@@ -86,7 +91,7 @@ export default React.createClass({
             data.removeColumns(0, data.getNumberOfColumns() || 0);
         }
         if (this.state.chartWrapper.getChart()) {
-            this.state.chartWrapper.getChart().clearChart();
+            // this.state.chartWrapper.getChart().clearChart();
         }
 
         // repopulate teh graph
