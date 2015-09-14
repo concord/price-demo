@@ -8,6 +8,7 @@ enum34==1.0.4
 graphviz==0.4.3
 idna==2.0
 ipaddress==1.0.14
+kafka-python==0.9.4
 kazoo==2.0
 pyasn1==0.1.8
 pycparser==2.14
