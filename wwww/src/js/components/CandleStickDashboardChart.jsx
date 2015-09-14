@@ -47,8 +47,7 @@ export default React.createClass({
     };
     return (
       <div className="Examples">
-      <h3>Bitcoin price</h3>
-        <Chart chartType={'LineChart'}
+      <Chart chartType={'LineChart'}
       options={options}
       width={'100%'}
       height={'640px'}

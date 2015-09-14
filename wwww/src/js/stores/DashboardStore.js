@@ -14,6 +14,8 @@ class DashboardWebSocket {
     };
     this.matchOrderMovingAvg = 0;
     this.matchOrderMovingAvgPrev = 0;
+    this.matchOrderPrice = 0;
+    this.matchOrderPricePrev = 0;
     this.socket = new WebSocket("ws://localhost:9000/dashboard");
     this.socket.onerror = () => {
       console.log("WebSocket can't be created. Socket error.");
@@ -83,7 +85,9 @@ const DashboardStore = assign({}, BaseStore, {
       ready: dashboardData.isReady(),
       dashboard: dashboardData.graph("default"),
       matchOrderMovingAvg: dashboardData.matchOrderMovingAvg || Math.random(),
-      matchOrderMovingAvgPrev: dashboardData.matchOrderMovingAvgPrev || Math.random()
+      matchOrderMovingAvgPrev: dashboardData.matchOrderMovingAvgPrev || Math.random(),
+      matchOrderPrice: dashboardData.matchOrderPrice || Math.random(),
+      matchOrderPricePrev: dashboardData.matchOrderPricePrev || Math.random()
     };
   },
 
