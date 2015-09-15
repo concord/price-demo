@@ -11,10 +11,6 @@ from concord.computation import (
 import dateutil
 import cachetools
 
-logging.basicConfig()
-log = logging.getLogger('CoinbasePricePrinter')
-log.setLevel(logging.DEBUG)
-
 def time_millis(): return int(round(time.time() * 1000))
 def next_second(sec=1): return time_millis() + (sec * 1000)
 
