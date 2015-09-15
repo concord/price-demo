@@ -3,55 +3,13 @@ import sys
 import unicodedata
 import logging
 import concord
-from concord.computation import (
-    Computation,
-    Metadata,
-    serve_computation
-)
-import dateutil
+from concord.computation import (Computation, Metadata, serve_computation)
 import cachetools
 
 def time_millis(): return int(round(time.time() * 1000))
 def next_second(sec=1): return time_millis() + (sec * 1000)
 
-class CoinbaseOrder:
-    def __init__(self, json_data):
-        r = json.loads(json_data)
-        for key in r: setattr(self, key, r[key])
-        from dateutil.parser import parse
-        self.time = parse(self.time)
-        self.sequence = int(self.sequence)
-        self.price = float(self.price)
 
-    def valid(self):
-        return self.sequence > 0
-
-
-    @staticmethod
-    def to_json(coinbase_order):
-        return json.dumps(coinbase_order,
-                          default=lambda o: o.__dict__,
-                          sort_keys=True)
-
-    @staticmethod
-    def from_json(byte_array):
-        return CoinbaseOrder(json.loads(byte_array))
-
-    @staticmethod
-    def combine(lhs_coinbase, rhs_coinbase):
-        if not is_combinable(lhs_coinbase, rhs_coinbase):
-            raise Exception("Cannot combine orders")
-        ret = lhs_coinbase
-        ret.price += rhs_coinbase.price
-        return ret
-
-    @staticmethod
-    def is_combinable(lhs_coinbase, rhs_coinbase):
-        try:
-            return (lhs_coinbase.type == rhs_coinbase.type &&
-                    lhs_coinbase.side == rhs_coinbase.side)
-        except:
-            return false
 
 class CoinbasePricePrinter(Computation):
     def __init__(self):
