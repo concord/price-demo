@@ -35,6 +35,7 @@ class CoinbaseMatchedOrderMovingAverage(Computation):
             ctx.set_timer(str(sec), nseconds_from_now_in_millis(1))
 
     def process_timer(self, ctx, key, time):
+        self.concord_logger.info("Emmiting avg for second: %s", key)
         avg_time = int(key)
         avg = self.cache[avg_time]
         if avg is not None:
