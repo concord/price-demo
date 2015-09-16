@@ -4,7 +4,7 @@
   "executable_arguments": ["../src/CoinbaseMatchedOrderMovingAverage.py"],
   "executable_name": "../src/runner.bash",
   "compress_files": ["../src/runner.bash", "../src"],
- "exclude_compress_files": [".*.pyc$"],
+  "exclude_compress_files": ["*.pyc$", "*.log$"],
   "computation_name": "match-orders-sec-avg",
   "mem": 1024,
   "cpus": 1.0
