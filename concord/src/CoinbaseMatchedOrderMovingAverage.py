@@ -29,6 +29,8 @@ class CoinbaseMatchedOrderMovingAverage(Computation):
     def process_record(self, ctx, record):
         order = CoinbaseOrder(record.data)
         if order.type == 'match':
+            self.concord_logger.info("Found matched order at price: %s",
+                                     str(order.price))
             sec = bottom_of_current_second()
             avg = self.cache[sec]
             avg.append(order.price)
