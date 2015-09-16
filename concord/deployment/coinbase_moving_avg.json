@@ -1,0 +1,11 @@
+{
+  "zookeeper_hosts": "localhost:2181",
+  "zookeeper_path": "/concord",
+  "executable_arguments": ["../src/CoinbaseMatchedOrderMovingAverage.py"],
+  "executable_name": "../src/runner.bash",
+  "compress_files": ["../src/runner.bash", "../src"],
+ "exclude_compress_files": [".*.pyc$"],
+  "computation_name": "match-orders-sec-avg",
+  "mem": 1024,
+  "cpus": 1.0
+}
