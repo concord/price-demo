@@ -18,7 +18,10 @@ echo "Exec directory: ${exec_dir}"
 
 if [[ -f $requirements ]]; then
     # need to overcome pip 128 chars path - software... :'(
-    dir=$(mktemp -d)
+    work_dir=$(mktemp -d -p $original)
+    symlink_dir=$(mktemp -d)
+    ln -s $work_dir $symlink_dir/concord
+    dir=$symlink_dir/concord
     cd $dir
     echo "Installing venv in $dir"
     virtualenv $dir/env
