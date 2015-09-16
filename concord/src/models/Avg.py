@@ -5,7 +5,7 @@ class Avg:
     def avg(self):
         if self.count == 0:
             return 0
-        sum(self.array)/self.count
+        return float(sum(self.array))/self.count
     def append(self, point):
         self.array.append(point)
         self.count = self.count + 1
