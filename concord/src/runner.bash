@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+tree
 original=${PWD}
 echo "Directory: ${PWD}"
 if [[ -f $original/requirements.txt ]]; then

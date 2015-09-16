@@ -1,9 +1,10 @@
 {
   "zookeeper_hosts": "localhost:2181",
   "zookeeper_path": "/bolt",
-  "executable_arguments": ["CoinbaseSource.py"],
-  "executable_name": "runner.bash",
-  "compress_files": ["CoinbaseSource.py", "runner.bash", "requirements.txt"],
+  "executable_arguments": ["../src/CoinbaseSource.py"],
+  "executable_name": "../src/runner.bash",
+  "compress_files": ["../src/runner.bash", "../src"],
+ "exclude_compress_files": [".*.pyc$"],
   "computation_name": "coinbase-indx",
   "mem": 1024,
   "cpus": 1.0
