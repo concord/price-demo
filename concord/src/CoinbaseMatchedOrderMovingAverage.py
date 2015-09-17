@@ -34,7 +34,7 @@ class CoinbaseMatchedOrderMovingAverage(Computation):
         order = CoinbaseOrder(record.data)
         if order.type == 'match':
             self.concord_logger.info("Found matched order at price: %s",
-                                     str(order.price))
+                                     order.price)
             sec = bottom_of_current_second()
             self.moving_average.append(order.price)
             ctx.set_timer(str(sec), nseconds_from_now_in_millis(1))
@@ -46,7 +46,7 @@ class CoinbaseMatchedOrderMovingAverage(Computation):
             'avg': self.moving_average.average
         }
         self.producer.send_messages(b'match-avg', json.dumps(d))
-        self.concord_logger.info("Saving to kafka for time: %s, avg price: ",
+        self.concord_logger.info("Saving to kafka for time: %s, avg price: %s",
                                  key, self.moving_average.average)
 
     def metadata(self):
