@@ -1,0 +1,11 @@
+{
+  "zookeeper_hosts": "localhost:2181",
+  "zookeeper_path": "/concord",
+  "executable_arguments": ["LatestMatchPrice.py"],
+  "executable_name": "runner.bash",
+  "compress_files": ["runner.bash", "."],
+  "exclude_compress_files": [".*\\.pyc$", ".*\\.log$", ".*\\.json"],
+  "computation_name": "latest-price",
+  "mem": 256,
+  "cpus": 0.5
+}
