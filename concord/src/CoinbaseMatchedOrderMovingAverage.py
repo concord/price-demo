@@ -42,7 +42,7 @@ class CoinbaseMatchedOrderMovingAverage(Computation):
         avg = self.cache[avg_time]
         if avg is not None:
             d = {
-                'time': avg_time,
+                'time': avg_time * 1000,
                 'avg': avg.avg()
             }
             self.producer.send_messages(b'match-avg', json.dumps(d))
