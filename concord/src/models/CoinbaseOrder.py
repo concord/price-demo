@@ -15,7 +15,8 @@ class CoinbaseOrder:
         from dateutil.parser import parse
         self.time = parse(self.time)
         self.sequence = int(self.sequence)
-        self.price = float(self.price)
+        if self.type in ['match', 'open', 'close']:
+            self.price = float(self.price)
 
     def valid(self):
         return self.sequence > 0
