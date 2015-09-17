@@ -16,7 +16,7 @@ class DashboardWebSocket {
     this.matchOrderMovingAvgPrev = 0;
     this.matchOrderPrice = 0;
     this.matchOrderPricePrev = 0;
-    this.socket = new WebSocket("ws://localhost:9000/dashboard");
+    this.socket = new WebSocket("ws://localhost:9200/dashboard");
     this.socket.onerror = () => {
       console.log("WebSocket can't be created. Socket error.");
     };
@@ -37,16 +37,24 @@ class DashboardWebSocket {
     let ret = this.graphs[topic] = this.graphs[topic] || [];
     return ret;
   }
+  // Object {topic: "match-avg", avg: 229.06777777777774, time: 1442501108000}
+  // Object {topic: "match-avg", avg: 229.07, time: 1442501109000}
   onmessage_(self, event) {
     self.ready = true;
     let msg = JSON.parse(event.data);
-    if (msg && msg['graphs']) {
-      msg['graphs'].map((pt) => {
-        let k = pt['topic'];
-        pt.date = new Date(pt.date);
-        let g = self.graphs[k] = self.graphs[k] || [];
-        g.push([pt.date, pt.close]);
-      });
+    if (msg && msg['topic']) {
+      msg.time = new Date(msg.time);
+      if(msg.topic === "latest-match-price") {
+        let g = self.graphs["default"] = self.graphs["default"] || [];
+        g.push([msg.time, msg.price]);
+
+        self.matchOrderPricePrev = self.matchOrderPrice;
+        self.matchOrderPrice = msg.price;
+
+      }else if(msg.topic === "match-avg"){
+        self.matchOrderMovingAvgPrev = self.matchOrderMovingAvg;
+        self.matchOrderMovingAvg = msg.avg;
+      }
       Object.entries(self.graphs).map(([k, v]) => {
         if (v.length > 100) {
           self.graphs[k] = v.slice(v.length - 100);
@@ -56,6 +64,7 @@ class DashboardWebSocket {
         self.notificationCallBack();
       }
     }
+    console.log(msg);
   }
   onopen_(event) {
     this.send(JSON.stringify({
@@ -84,10 +93,10 @@ const DashboardStore = assign({}, BaseStore, {
     return {
       ready: dashboardData.isReady(),
       dashboard: dashboardData.graph("default"),
-      matchOrderMovingAvg: dashboardData.matchOrderMovingAvg || Math.random(),
-      matchOrderMovingAvgPrev: dashboardData.matchOrderMovingAvgPrev || Math.random(),
-      matchOrderPrice: dashboardData.matchOrderPrice || Math.random(),
-      matchOrderPricePrev: dashboardData.matchOrderPricePrev || Math.random()
+      matchOrderMovingAvg: dashboardData.matchOrderMovingAvg,
+      matchOrderMovingAvgPrev: dashboardData.matchOrderMovingAvgPrev,
+      matchOrderPrice: dashboardData.matchOrderPrice,
+      matchOrderPricePrev: dashboardData.matchOrderPricePrev
     };
   },
 

@@ -7,7 +7,7 @@ module.exports = {
     settings: {
       root: dest,
       host: 'localhost',
-      port: 8080,
+      port: 9090,
       livereload: {
         port: 35929
       }
