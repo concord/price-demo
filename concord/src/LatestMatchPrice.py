@@ -21,7 +21,9 @@ class LatestMatchPrice(Computation):
         order = CoinbaseOrder(record.data)
         if order.type == 'match':
             self.price = order.price
-            sec = nseconds_from_now_in_millis(1)
+            # it has to include 0's in the millisecond and micro second
+            # parts of the time to be reasonable for updates to kafka
+            sec = (bottom_of_current_second() * 1000) + 1000
             ctx.set_timer(str(sec), sec)
 
     def process_timer(self, ctx, key, time):
