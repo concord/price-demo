@@ -10,7 +10,6 @@ from utils.kafka_utils import local_kafka_producer
 
 class LatestMatchPrice(Computation):
     def __init__(self):
-        self.kafka = KafkaClient('localhost:9092')
         self.producer = local_kafka_producer()
 
     def init(self, ctx):
