@@ -41,7 +41,7 @@ class CoinbaseSource(Computation):
         self.queue = Queue()
     def init(self, ctx):
         ctx.set_timer('loop', time_millis() + 1000) # start in 1 sec
-        log.info("Coinbase initialized")
+        self.concord_logger.info("Coinbase initialized")
     def process_timer(self, ctx, key, time):
         while not self.queue.empty():
             ctx.produce_record('btcusd', 'empty', self.queue.get())
