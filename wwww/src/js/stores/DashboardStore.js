@@ -56,8 +56,8 @@ class DashboardWebSocket {
         self.matchOrderMovingAvg = msg.avg;
       }
       Object.entries(self.graphs).map(([k, v]) => {
-        if (v.length > 100) {
-          self.graphs[k] = v.slice(v.length - 100);
+        if (v.length > 300) {
+          self.graphs[k] = v.slice(v.length - 300);
         }
       });
       if (self.notificationCallBack) {

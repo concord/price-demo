@@ -1,7 +1,0 @@
-autobahn==0.10.9
-kafka-python==0.9.4
-six==1.9.0
-Twisted==15.4.0
-txaio==2.0.0
-wheel==0.24.0
-zope.interface==4.1.2

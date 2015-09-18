@@ -3,7 +3,8 @@ import sys
 import time
 import concord
 from collections import deque
-from concord.computation import (Computation, Metadata, serve_computation)
+from concord.computation import (Computation, Metadata, serve_computation,
+                                 StreamGrouping))
 from models.CoinbaseOrder import CoinbaseOrder
 from utils.time_utils import (time_millis, bottom_of_current_second,
                               nseconds_from_now_in_millis)
@@ -24,7 +25,7 @@ class MovingAvg(deque):
 class CoinbaseMatchedOrderMovingAverage(Computation):
     def __init__(self):
         self.moving_average = MovingAvg()
-        self.producer = local_kafka_producer()
+        self.producer = local_kafka_producer('match-avg')
 
     def init(self, ctx):
         self.concord_logger.info("Matched order moving avg init")
@@ -45,11 +46,12 @@ class CoinbaseMatchedOrderMovingAverage(Computation):
             'time': int(key),
             'avg': self.moving_average.average
         }
-        self.producer.send_messages(b'match-avg', json.dumps(d))
+        self.producer.produce(json.dumps(d))
         self.concord_logger.info("Saving to kafka for time: %s, avg price: %s",
                                  key, str(self.moving_average.average))
 
     def metadata(self):
-        return Metadata(name='match-orders-sec-avg', istreams=['btcusd'])
+        return Metadata(name='match-orders-sec-avg',
+                        istreams=[['btcusd', StreamGrouping.GROUP_BY]])
 
 serve_computation(CoinbaseMatchedOrderMovingAverage())

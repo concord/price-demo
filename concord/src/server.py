@@ -6,7 +6,7 @@ from twisted.web.static import File
 from autobahn.twisted.websocket import (WebSocketServerFactory,
                                         WebSocketServerProtocol)
 from autobahn.twisted.resource import WebSocketResource
-from utils.kafka_utils import local_kafka_consumer
+# from utils.kafka_utils import local_kafka_consumer
 import threading
 import logging
 import logging.handlers
@@ -16,16 +16,30 @@ logging.basicConfig(format=logging_format_string)
 log = logging.getLogger('concord.WebsocketServer')
 log.setLevel(logging.DEBUG)
 
+from kafka import KafkaConsumer
+
 class KafkaWebSocketService(WebSocketServerProtocol):
     def onConnect(self, request):
         log.info("WebSocket connection request: {}".format(request))
-        kafka_consumer = local_kafka_consumer('latest-match-price', 'match-avg')
+
+    def onMessage(self, payload, isBinary):
+        log.info("Received payload: %s", str(payload))
+        if hasattr(self, 'kafka_thread'):
+            return
+        kafka_consumer = KafkaConsumer('latest-match-price', 'match-avg',
+                                       bootstrap_servers=['localhost:9092'],
+                                       group_id='website_consumer_group',
+                                       auto_commit_enable=True,
+                                       auto_commit_interval_ms=30 * 1000,
+                                       # change to largest,smallest for prod
+                                       auto_offset_reset='smallest')
         def drain_kafka_queue():
             try:
                 for msg in kafka_consumer:
                     d = json.loads(msg.value)
                     d['topic'] = msg.topic
                     self.sendMessage(json.dumps(d))
+                    kafka_consumer.task_done(msg)
             except Exception as e:
                 log.error("Error sending message: %s", e)
             finally:
@@ -34,11 +48,6 @@ class KafkaWebSocketService(WebSocketServerProtocol):
 
         self.kafka_thread = threading.Thread(target=drain_kafka_queue)
         self.kafka_thread.start()
-
-    def onMessage(self, payload, isBinary):
-        #if hasattr(self, 'kafka_thread'):
-        log.info("Received payload: %s", str(payload))
-        #return
 
 
 if __name__ == '__main__':

@@ -1,20 +1,16 @@
-from kafka import (SimpleProducer, KafkaClient, KafkaConsumer)
+from pykafka import (KafkaClient)
 
 
-def sync_producer(kafka_client):
-    """This is optimized for localhost:9092 usg"""
-    return SimpleProducer(kafka_client, async=False,
-                          req_acks=SimpleProducer.ACK_AFTER_LOCAL_WRITE,
-                          batch_send_every_n=10,
-                          ack_timeout=100, # ms
-                          sync_fail_on_error=True)
+def kafka_producer(kafka_client, topic):
+    return kafka_client.topics[topic].get_producer()
 
 
 def local_kafka_client():
-    return KafkaClient('localhost:9092')
+    return KafkaClient(hosts='localhost:9092')
 
-def local_kafka_producer():
-    return sync_producer(local_kafka_client())
+def local_kafka_producer(topic):
+    cli = local_kafka_client()
+    return kafka_producer(cli, topic)
 
 
 def local_kafka_consumer(*topics):
