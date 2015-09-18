@@ -18,13 +18,14 @@ log.setLevel(logging.DEBUG)
 
 # more advanced consumer -- multiple topics w/ auto commit offset
 # management
-kafka_consumer = KafkaConsumer('latest-match-price', 'match-avg',
-                               bootstrap_servers=['localhost:9092'],
-                               group_id='website_consumer_group',
-                               auto_commit_enable=True,
-                               auto_commit_interval_ms=30 * 1000,
-                               # change to largest,smallest for prod
-                               auto_offset_reset='largest')
+def new_kafka_consumer():
+    return KafkaConsumer('latest-match-price', 'match-avg',
+                         bootstrap_servers=['localhost:9092'],
+                         group_id='website_consumer_group',
+                         auto_commit_enable=False,
+                         auto_commit_interval_ms=30 * 1000,
+                         # change to largest,smallest for prod
+                         auto_offset_reset='largest')
 
 class KafkaWebSocketService(WebSocketServerProtocol):
     def onConnect(self, request):
@@ -34,13 +35,18 @@ class KafkaWebSocketService(WebSocketServerProtocol):
         if hasattr(self, 'kafka_thread'):
             log.info("Received payload: %s", str(payload))
             return
-
+        kafka_consumer = new_kafka_consumer()
         def drain_kafka_queue():
-            for msg in kafka_consumer:
-                d = json.loads(msg.value)
-                d['topic'] = msg.topic
-                self.sendMessage(json.dumps(d))
-            log.info("exiting thread")
+            try:
+                for msg in kafka_consumer:
+                    d = json.loads(msg.value)
+                    d['topic'] = msg.topic
+                    self.sendMessage(json.dumps(d))
+            except Exception as e:
+                log.error("Error sending message: %s", e)
+            finally:
+                kafka_consumer.stop()
+                log.info("exiting thread")
 
         self.kafka_thread = threading.Thread(target=drain_kafka_queue)
         self.kafka_thread.start()
