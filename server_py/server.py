@@ -6,7 +6,7 @@ from twisted.web.static import File
 from autobahn.twisted.websocket import (WebSocketServerFactory,
                                         WebSocketServerProtocol)
 from autobahn.twisted.resource import WebSocketResource
-from kafka import KafkaConsumer
+from utils.kafka_utils import local_kafka_consumer
 import threading
 import logging
 import logging.handlers
@@ -16,26 +16,10 @@ logging.basicConfig(format=logging_format_string)
 log = logging.getLogger('concord.WebsocketServer')
 log.setLevel(logging.DEBUG)
 
-# more advanced consumer -- multiple topics w/ auto commit offset
-# management
-def new_kafka_consumer():
-    return KafkaConsumer('latest-match-price', 'match-avg',
-                         bootstrap_servers=['localhost:9092'],
-                         group_id='website_consumer_group',
-                         auto_commit_enable=False,
-                         auto_commit_interval_ms=30 * 1000,
-                         # change to largest,smallest for prod
-                         auto_offset_reset='largest')
-
 class KafkaWebSocketService(WebSocketServerProtocol):
     def onConnect(self, request):
         log.info("WebSocket connection request: {}".format(request))
-
-    def onMessage(self, payload, isBinary):
-        if hasattr(self, 'kafka_thread'):
-            log.info("Received payload: %s", str(payload))
-            return
-        kafka_consumer = new_kafka_consumer()
+        kafka_consumer = local_kafka_consumer('latest-match-price', 'match-avg')
         def drain_kafka_queue():
             try:
                 for msg in kafka_consumer:
@@ -50,6 +34,12 @@ class KafkaWebSocketService(WebSocketServerProtocol):
 
         self.kafka_thread = threading.Thread(target=drain_kafka_queue)
         self.kafka_thread.start()
+
+    def onMessage(self, payload, isBinary):
+        #if hasattr(self, 'kafka_thread'):
+        log.info("Received payload: %s", str(payload))
+        #return
+
 
 if __name__ == '__main__':
     port = 9200
