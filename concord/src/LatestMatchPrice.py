@@ -26,6 +26,6 @@ class LatestMatchPrice(Computation):
 
     def metadata(self):
         return Metadata(name='latest-price',
-                        istreams=[['btcusd', StreamGrouping.GROUP_BY]])
+                        istreams=[('btcusd', StreamGrouping.GROUP_BY)])
 
 serve_computation(LatestMatchPrice())

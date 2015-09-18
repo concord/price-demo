@@ -4,7 +4,7 @@ import time
 import concord
 from collections import deque
 from concord.computation import (Computation, Metadata, serve_computation,
-                                 StreamGrouping))
+                                 StreamGrouping)
 from models.CoinbaseOrder import CoinbaseOrder
 from utils.time_utils import (time_millis, bottom_of_current_second,
                               nseconds_from_now_in_millis)
@@ -52,6 +52,6 @@ class CoinbaseMatchedOrderMovingAverage(Computation):
 
     def metadata(self):
         return Metadata(name='match-orders-sec-avg',
-                        istreams=[['btcusd', StreamGrouping.GROUP_BY]])
+                        istreams=[('btcusd', StreamGrouping.GROUP_BY)])
 
 serve_computation(CoinbaseMatchedOrderMovingAverage())
