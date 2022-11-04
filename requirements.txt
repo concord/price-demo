@@ -14,7 +14,7 @@ pyOpenSSL==0.15.1
 six==1.9.0
 thrift==0.9.2
 trace2html==0.2.1
-Twisted==15.3.0
+Twisted==22.10.0
 txaio==1.0.3
 urllib3==1.11
 wheel==0.24.0
